@@ -63,14 +63,12 @@
             for (var i = 1; i <= 98; i++) {
                 temp.push(i + 1);
             }
-            // alert(temp);
 
             for (var i = 0; i < 100; i++) {
                 var j = Math.floor(Math.random() * (temp.length));
                 listCards.push(temp.splice(j, 1));
 
             }
-            // alert(listCards);
             for (var i = 0; i < 8; i++) {
                 board.push(listCards.shift());
             }
@@ -166,18 +164,9 @@
         }
 
         function imprimeBoard() {
-            // alert(board);
-
-            // Tas[emplacement] = board[position];
-            // ctx.beginPath();
-            // ctx.fillStyle = "red";
-            // ctx.closePath();
-
             var ligne = 1;
             var colonne = 1;
-            // alert("board l " + board.length);
             for (i = 0; i < board.length; i++) {
-
                 if (colonne == 5) {
                     ligne++;
                     colonne = 1;
@@ -189,11 +178,7 @@
         }
 
         function placeCard(position, emplacement) {
-            // alert("emplacement = " + emplacement + " et pos=" + position);
-            // alert("le tas est avant : " + Tas);
             Tas[emplacement] = board[position];
-            // alert("le tas est après : " + Tas);
-
             board.splice(position, 1);
             var posiX = 40;
             var posiY = 15;
@@ -209,27 +194,7 @@
                     posiX = 125;
                     posiY = 95;
             }
-            // imprimerCarte(posiX, posiY, board[position]);
         }
-
-        // def placeCarte(position, emplacement):
-        //     Tas[emplacement] = board[position]
-        // del board[position]# print("le tas est : ")# print(Tas)# print("le new board est :")# print(board)
-
-        // ligne = 1
-        // colonne = 1
-        // for i in board:
-
-        //     if colonne == 5:
-        //     ligne += 1
-        // colonne = 1
-        // imprimercarte((colonne - 1) * 45 + 15, ligne * 50 + 110, i)
-        // colonne += 1 -->
-
-
-        // imprimerCarte(100, 100, 10);
-
-
 
         function init() {
             dessinerectG(10, 10);
@@ -289,16 +254,7 @@
             var positiondumin = mintot.indexOf(Math.min(...mintot));
             var onplace = 0;
 
-
-            // ctx.beginPath();
-            // ctx.fillText(Math.min(...mintot), 100, 109);
-            // ctx.fillText(positiondumin, 100, 129);
-            // ctx.fillText(onplace, 100, 149);
-            // ctx.closePath();
-
             if (Math.min(...mintot) < 200) {
-
-
                 if (positiondumin == 0) {
                     onplace = val1.indexOf(minval1);
                 }
@@ -312,7 +268,6 @@
                     onplace = val4.indexOf(minval4);
                 }
 
-                // alert("Le board est : " + board + "\nLe tas est : " + Tas + "\nmintot est " + mintot + "\nOn va placer : " + onplace + "(qui est " + board[onplace] + ")" + " à la position " + positiondumin);
 
                 placeCard(onplace, positiondumin);
                 ctx.fillStyle = "#eee";
@@ -321,18 +276,12 @@
                 imprimeTas();
                 imprimeBoard();
                 ctx.fillText("Cartes " + compteurplace, 100, 79);
-
-                // ctx.fillStyle = "#eee";
-                // ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // imprimeBoard();
                 compteurplace--;
-                // alert(board);
+
 
                 if (listCards.length > 2 && board.length == 6) {
                     board.push(listCards.shift());
                     board.push(listCards.shift());
-
-                    // imprimeBoard();
                 }
                 if (board.length == 0) {
                     alert("on a fini !");
