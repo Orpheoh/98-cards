@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>98 cards</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 20px;
+            margin-top: 100px;
+        }
+        
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="192" height="260"></canvas>
+
+
+    <script>
+        var board = [];
+        var listCards = [];
+
+        var onarriveasolv = 1;
+
+
+        var taille = 200;
+        var maxH = 5 * taille;
+        var maxL = 5 * taille;
+        var H1 = 1;
+        var H2 = 20;
+        var B1 = 100;
+        var B2 = 80;
+        var Tas = [1, 1, 100, 100];
+        var compteurplace = 98;
+        var onplace = 0;
+
+        var grisclair = '#DEDAC9';
+        var grisfonce = '#CDC9B9';
+        var quasinoir = '#42413C';
+        demar();
+        window.onload = function() {
+
+            canvas = document.getElementById("myCanvas");
+            ctx = canvas.getContext("2d");
+            // setInterval(main, 0);
+            main();
+
+        }
+
+        function demar() {
+
+            var temp = [];
+            for (var i = 1; i <= 98; i++) {
+                temp.push(i + 1);
+            }
+            // alert(temp);
+
+            for (var i = 0; i < 100; i++) {
+                var j = Math.floor(Math.random() * (temp.length));
+                listCards.push(temp.splice(j, 1));
+
+            }
+            // alert(listCards);
+            for (var i = 0; i < 8; i++) {
+                board.push(listCards.shift());
+            }
+        }
+
+        function corrigeList(liste) {
+            for (i = 0; i < liste.length; i++) {
+                if (liste[i] < 0 && liste[i] != -10) {
+                    liste[i] = 200;
+                }
+            }
+            return liste;
+        }
+
+
+
+        function dessinerectG(posX, posY) {
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.fillStyle = grisclair;
+            ctx.rect(posX, posY, 70, 50);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.rect(posX + 30, posY + 5, 30, 40);
+            ctx.stroke();
+            ctx.fillStyle = grisfonce;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function dessinerectD(posX, posY) {
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.fillStyle = grisclair;
+            ctx.rect(posX, posY, 70, 50);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.rect(posX + 10, posY + 5, 30, 40);
+            ctx.stroke();
+            ctx.fillStyle = grisfonce;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+
+        function dessinetriangleH(posX, posY) {
+            ctx.beginPath();
+            ctx.fillStyle = "black";
+            ctx.moveTo(posX, posY);
+            ctx.lineTo(posX - 8, posY + 12);
+            ctx.lineTo(posX + 8, posY + 12);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function dessinetriangleB(posX, posY) {
+            ctx.beginPath();
+            ctx.fillStyle = "black";
+            ctx.moveTo(posX, posY);
+            ctx.lineTo(posX - 8, posY - 12);
+            ctx.lineTo(posX + 8, posY - 12);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function imprimerCarte(posX, posY, val) {
+            var testcard = val;
+            testcard = Math.floor(testcard / 100 * 255);
+            var colorcard = "#ff";
+            var valeur = (255 - testcard);
+            var texthex = valeur.toString(16);
+            ctx.font = "13px Arial";
+            ctx.textAlign = "center";
+            if (valeur < 16) {
+                texthex += "0";
+            }
+            texthex += "00";
+            colorcard += texthex;
+            ctx.beginPath();
+            ctx.fillStyle = colorcard;
+            ctx.rect(posX, posY, 30, 40);
+            ctx.stroke();
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.fillStyle = "black";
+            ctx.fillText(val, posX + 14, posY + 24);
+            ctx.closePath();
+        }
+
+        function imprimeBoard() {
+            // alert(board);
+
+            // Tas[emplacement] = board[position];
+            // ctx.beginPath();
+            // ctx.fillStyle = "red";
+            // ctx.closePath();
+
+            var ligne = 1;
+            var colonne = 1;
+            // alert("board l " + board.length);
+            for (i = 0; i < board.length; i++) {
+
+                if (colonne == 5) {
+                    ligne++;
+                    colonne = 1;
+                }
+                imprimerCarte((colonne - 1) * 45 + 14, ligne * 50 + 110, board[i]);
+                colonne++;
+            }
+
+        }
+
+        function placeCard(position, emplacement) {
+            // alert("emplacement = " + emplacement + " et pos=" + position);
+            // alert("le tas est avant : " + Tas);
+            Tas[emplacement] = board[position];
+            // alert("le tas est après : " + Tas);
+
+            board.splice(position, 1);
+            var posiX = 40;
+            var posiY = 15;
+            switch (emplacement) {
+
+                case 1:
+                    posiX = 125;
+                    break;
+                case 2:
+                    posiY = 95;
+                    break
+                case 3:
+                    posiX = 125;
+                    posiY = 95;
+            }
+            // imprimerCarte(posiX, posiY, board[position]);
+        }
+
+        // def placeCarte(position, emplacement):
+        //     Tas[emplacement] = board[position]
+        // del board[position]# print("le tas est : ")# print(Tas)# print("le new board est :")# print(board)
+
+        // ligne = 1
+        // colonne = 1
+        // for i in board:
+
+        //     if colonne == 5:
+        //     ligne += 1
+        // colonne = 1
+        // imprimercarte((colonne - 1) * 45 + 15, ligne * 50 + 110, i)
+        // colonne += 1 -->
+
+
+        // imprimerCarte(100, 100, 10);
+
+
+
+        function init() {
+            dessinerectG(10, 10);
+            dessinerectG(10, 90);
+            dessinerectD(115, 10);
+            dessinerectD(115, 90);
+            dessinetriangleH(25, 28);
+            dessinetriangleH(170, 28);
+            dessinetriangleB(25, 124);
+            dessinetriangleB(170, 124);
+        }
+
+        function imprimeTas() {
+            imprimerCarte(40, 15, Tas[0]);
+            imprimerCarte(125, 15, Tas[1]);
+            imprimerCarte(40, 95, Tas[2]);
+            imprimerCarte(125, 95, Tas[3]);
+        }
+
+        function main() {
+            ctx.fillStyle = "#eee";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            init();
+            imprimeBoard();
+            imprimeTas();
+            ctx.font = "13px Arial";
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+
+            ctx.fillText("Cartes " + compteurplace, 100, 79);
+            var val1 = [];
+            var val2 = [];
+            var val3 = [];
+            var val4 = [];
+            var mintot = [];
+
+            for (i = 0; i < board.length; i++) {
+                val1.push(board[i] - Tas[0]);
+                val2.push(board[i] - Tas[1]);
+                val3.push(Tas[2] - board[i]);
+                val4.push(Tas[3] - board[i]);
+            }
+
+            corrigeList(val1);
+            corrigeList(val2);
+            corrigeList(val3);
+            corrigeList(val4);
+
+            var minval1 = Math.min(...val1);
+            var minval2 = Math.min(...val2);
+            var minval3 = Math.min(...val3);
+            var minval4 = Math.min(...val4);
+
+
+            mintot.push(minval1, minval2, minval3, minval4);
+
+            var positiondumin = mintot.indexOf(Math.min(...mintot));
+            var onplace = 0;
+
+
+            // ctx.beginPath();
+            // ctx.fillText(Math.min(...mintot), 100, 109);
+            // ctx.fillText(positiondumin, 100, 129);
+            // ctx.fillText(onplace, 100, 149);
+            // ctx.closePath();
+
+            if (Math.min(...mintot) < 200) {
+
+
+                if (positiondumin == 0) {
+                    onplace = val1.indexOf(minval1);
+                }
+                if (positiondumin == 1) {
+                    onplace = val2.indexOf(minval2);
+                }
+                if (positiondumin == 2) {
+                    onplace = val3.indexOf(minval3);
+                }
+                if (positiondumin == 3) {
+                    onplace = val4.indexOf(minval4);
+                }
+
+                // alert("Le board est : " + board + "\nLe tas est : " + Tas + "\nmintot est " + mintot + "\nOn va placer : " + onplace + "(qui est " + board[onplace] + ")" + " à la position " + positiondumin);
+
+                placeCard(onplace, positiondumin);
+                ctx.fillStyle = "#eee";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                init();
+                imprimeTas();
+                imprimeBoard();
+                ctx.fillText("Cartes " + compteurplace, 100, 79);
+
+                // ctx.fillStyle = "#eee";
+                // ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // imprimeBoard();
+                compteurplace--;
+                // alert(board);
+
+                if (listCards.length > 2 && board.length == 6) {
+                    board.push(listCards.shift());
+                    board.push(listCards.shift());
+
+                    // imprimeBoard();
+                }
+                if (board.length == 0) {
+                    alert("on a fini !");
+                }
+            }
+            requestAnimationFrame(main);
+
+
+
+        }
+    </script>
+</body>
+
+</html>
